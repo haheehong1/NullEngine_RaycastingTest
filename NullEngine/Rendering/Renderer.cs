@@ -24,6 +24,7 @@ namespace NullEngine.Rendering
 
         //where data is stored in cpu
         private byte[] frameBuffer = new byte[0];
+        private byte[] frameMaterialID2Buffer = new byte[0];
         private byte[] materialIDBuffer = new byte[0];
         private float[] frameDistanceBuffer = new float[0];
 
@@ -85,6 +86,7 @@ namespace NullEngine.Rendering
                     Application.Current.Dispatcher.InvokeAsync(Draw);
 
                     byte[] materials = materialIDBuffer;
+                    byte[] materials2 = frameMaterialID2Buffer;
                     float[] distances = frameDistanceBuffer;
                 }
 
@@ -117,6 +119,7 @@ namespace NullEngine.Rendering
                     }
 
                     frameBuffer = new byte[width * height * 3];
+                    frameMaterialID2Buffer = new byte[width * height *3];
                     materialIDBuffer = new byte[width * height];
                     frameDistanceBuffer = new float[width * height];
 
@@ -140,6 +143,7 @@ namespace NullEngine.Rendering
             {
                 gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer, frameData.deviceFrameData);
                 deviceFrameBuffer.memoryBuffer.CopyToCPU(frameBuffer);
+                deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
                 deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(materialIDBuffer);
 
                 deviceFrameDistanceBuffer.memoryDistanceBuffer.CopyToCPU(frameDistanceBuffer);
@@ -151,8 +155,9 @@ namespace NullEngine.Rendering
 
         private void Draw()
         {
-            renderFrame.update(ref frameBuffer);
-            renderFrame.updateMaterialID(ref materialIDBuffer);
+            //renderFrame.update(ref frameBuffer);//
+            renderFrame.update(ref frameMaterialID2Buffer);
+            //renderFrame.updateMaterialID(ref materialIDBuffer);//
             //renderFrame.updateDistance(ref frameDistanceBuffer);
             renderFrame.frameRate = frameTimer.lastFrameTimeMS;
         }

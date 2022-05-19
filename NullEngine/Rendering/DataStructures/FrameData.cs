@@ -18,6 +18,7 @@ namespace NullEngine.Rendering.DataStructures
         public MemoryBuffer1D<float, Stride1D.Dense> depthBuffer;
 
         public MemoryBuffer1D<float, Stride1D.Dense> outputBuffer;
+        public MemoryBuffer1D<int, Stride1D.Dense> outputMaterialID2Buffer;
         public MemoryBuffer1D<int, Stride1D.Dense> outputMaterialIDBuffer;
 
 
@@ -35,6 +36,7 @@ namespace NullEngine.Rendering.DataStructures
             depthBuffer = device.Allocate1D<float>(width * height * 3);
 
             outputBuffer = device.Allocate1D<float>(width * height * 3);
+            outputMaterialID2Buffer = device.Allocate1D<int>(width * height * 3);
             outputMaterialIDBuffer = device.Allocate1D<int>(width * height );
 
             deviceFrameData = new dFrameData(this);
@@ -46,6 +48,7 @@ namespace NullEngine.Rendering.DataStructures
             lightBuffer.Dispose();
             depthBuffer.Dispose();
             outputBuffer.Dispose();
+            outputMaterialID2Buffer.Dispose();
             outputMaterialIDBuffer.Dispose();
         }
     }
@@ -60,6 +63,7 @@ namespace NullEngine.Rendering.DataStructures
         public ArrayView1D<float, Stride1D.Dense> depthBuffer;
 
         public ArrayView1D<float, Stride1D.Dense> outputBuffer;
+        public ArrayView1D<int, Stride1D.Dense> outputMaterialID2Buffer;
         public ArrayView1D<int, Stride1D.Dense> outputMaterialIDBuffer;
 
         public dFrameData(FrameData frameData)
@@ -72,6 +76,7 @@ namespace NullEngine.Rendering.DataStructures
             lightBuffer = frameData.lightBuffer;
             depthBuffer = frameData.depthBuffer;
             outputBuffer = frameData.outputBuffer;
+            outputMaterialID2Buffer = frameData.outputMaterialID2Buffer;
             outputMaterialIDBuffer = frameData.outputMaterialIDBuffer;
         }
     }

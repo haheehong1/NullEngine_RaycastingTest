@@ -88,6 +88,9 @@ namespace NullEngine.Rendering.Implementation
                 frameData.outputBuffer[(pixel * 3)]     = hit.t;
                 frameData.outputBuffer[(pixel * 3) + 1] = hit.t;
                 frameData.outputBuffer[(pixel * 3) + 2] = hit.t;
+                frameData.outputMaterialID2Buffer[(pixel * 3)] = hit.materialID; //hum.. let's see if this works
+                frameData.outputMaterialID2Buffer[(pixel * 3) + 1] = hit.materialID;
+                frameData.outputMaterialID2Buffer[(pixel * 3) + 2] = hit.materialID;
                 frameData.outputMaterialIDBuffer[pixel] = hit.materialID;
                 frameData.depthBuffer[pixel] = hit.t;
             }
@@ -99,6 +102,16 @@ namespace NullEngine.Rendering.Implementation
             color = Vec3.reinhard(color);
             output.writeFrameBuffer(pixel * 3, color.x, color.y, color.z);
 
+            Vec3 materialID2 = UtilityKernels.readFrameMaterialID2Buffer(frameData.outputMaterialID2Buffer, pixel * 3); //problem
+            //materialID2 = Vec3.reinhard(materialID2);
+            switch(materialID2.x)
+            {
+                case 1:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 255, 0, 0);
+                    break;
+            }
+            //output.writeFrameMaterialID2Buffer(pixel * 3, (int)materialID2.x, (int)materialID2.y, (int)materialID2.z);
+
             //add frameData.outputMaterialIDBuffer
             int materialID = UtilityKernels.readFrameMaterialIDBuffer(frameData.outputMaterialIDBuffer, pixel);
             output.writeFrameMaterialIDBuffer(pixel, materialID);
@@ -107,5 +120,6 @@ namespace NullEngine.Rendering.Implementation
             float distance = UtilityKernels.readFrameDistanceBuffer(frameData.depthBuffer, pixel);
             output2.writeFrameDistanceBuffer(pixel, distance);
         }
+
     }
 }

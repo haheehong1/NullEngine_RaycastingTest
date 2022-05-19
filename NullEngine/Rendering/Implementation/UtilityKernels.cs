@@ -9,7 +9,7 @@ namespace NullEngine.Rendering.Implementation
 {
     public static class UtilityKernels
     {
-        public static void ClearByteFramebuffer(Index1D index, dByteFrameBuffer frameBuffer, dFloatFrameBuffer frameDistanceBuffer, byte r, byte g, byte b, float t)
+        public static void ClearByteFramebuffer(Index1D index, dByteFrameBuffer frameBuffer, dByteFrameBuffer frameMaterialID2Buffer, dFloatFrameBuffer frameDistanceBuffer, byte r, byte g, byte b, float t)
         {
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
@@ -21,7 +21,20 @@ namespace NullEngine.Rendering.Implementation
 
             int newIndex = ((y * frameBuffer.width) + x);
             frameBuffer.writeFrameBuffer(newIndex * 3, r, g, b);
+            
+            //Material ID2
+            //FLIP Y
+            //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
+            int ym = (frameMaterialID2Buffer.height - 1) - ((index) / frameMaterialID2Buffer.width);
 
+            //NORMAL X
+            int xm = ((index) % frameMaterialID2Buffer.width);
+            //int y = ((index) / frameBuffer.width);
+
+            int newIndexM = ((ym * frameMaterialID2Buffer.width) + xm);
+            frameMaterialID2Buffer.writeFrameMaterialID2Buffer(newIndexM * 3, r, g, b);
+
+            //Material ID
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
             int yd = (frameDistanceBuffer.height - 1) - ((index) / frameDistanceBuffer.width);
@@ -45,6 +58,20 @@ namespace NullEngine.Rendering.Implementation
             return new Vec3(frame[index], frame[index + 1], frame[index + 2]);
         }
 
+        //Material ID 2
+        public static Vec3 readFrameMaterialID2Buffer(ArrayView1D<int, Stride1D.Dense> frame, int width, int x, int y)
+        {
+            int newIndex = ((y * width) + x) * 3;
+            return readFrameMaterialID2Buffer(frame, newIndex);
+        }
+
+        public static Vec3 readFrameMaterialID2Buffer(ArrayView1D<int, Stride1D.Dense> frame, int index)
+        {
+            return new Vec3(frame[index], frame[index + 1], frame[index + 2]);
+        }
+
+
+        //Material ID
 
         public static int readFrameMaterialIDBuffer(ArrayView1D<int, Stride1D.Dense> frame, int index)
         {
