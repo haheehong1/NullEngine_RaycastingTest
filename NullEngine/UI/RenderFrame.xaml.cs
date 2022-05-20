@@ -27,9 +27,8 @@ namespace NullEngine.UI
         public int height;
         public WriteableBitmap wBitmap;
         public WriteableBitmap wMaterialIDmap;
-        //public WriteableBitmap wDistancemap;
         public Int32Rect rect;
-        
+        //dont need wDistanceBitmap or wMaterialBitmap
 
         public Action<int, int> onResolutionChanged;
         public double frameTime;
@@ -135,20 +134,7 @@ namespace NullEngine.UI
             }
         }
 
-        /*
-        public void updateDistance(ref float[] data)
-        {
-            if (data.Length == wDistancemap.PixelWidth * wDistancemap.PixelHeight)
-            {
-                wDistancemap.Lock();
-                float[] pBackBuffer = wDistancemap.BackBuffer;
-                Marshal.Copy(data, 0, pBackBuffer, data.Length);
-                wDistancemap.AddDirtyRect(rect);
-                wDistancemap.Unlock();
-
-                Info.Content = (int)frameRate + " MS";
-            }
-        }
-        */
+        
+        
     }
 }

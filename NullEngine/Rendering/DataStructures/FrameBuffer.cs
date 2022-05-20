@@ -22,6 +22,7 @@ namespace NullEngine.Rendering.DataStructures
 
             memoryDistanceBuffer = gpu.device.Allocate1D<float>(height * width);
             frameDistanceBuffer = new dFloatFrameBuffer(height, width, memoryDistanceBuffer);
+
         }
 
         public void Dispose()
@@ -89,6 +90,7 @@ namespace NullEngine.Rendering.DataStructures
         public MemoryBuffer1D<byte, Stride1D.Dense> memoryBuffer;
         public MemoryBuffer1D<byte, Stride1D.Dense> memoryMaterialID2Buffer;
         public MemoryBuffer1D<byte, Stride1D.Dense> memoryMaterialIDBuffer;
+        public MemoryBuffer1D<byte, Stride1D.Dense> memoryDistance2Buffer;
         public bool isDisposed = false;
         public bool inUse = false;
 
@@ -97,7 +99,8 @@ namespace NullEngine.Rendering.DataStructures
             memoryBuffer = gpu.device.Allocate1D<byte>(height * width * 3);
             memoryMaterialID2Buffer = gpu.device.Allocate1D<byte>(height * width * 3);
             memoryMaterialIDBuffer = gpu.device.Allocate1D<byte>(height * width);
-            frameBuffer = new dByteFrameBuffer(height, width, memoryBuffer, memoryMaterialID2Buffer, memoryMaterialIDBuffer);
+            memoryDistance2Buffer = gpu.device.Allocate1D<byte>(height * width * 3);
+            frameBuffer = new dByteFrameBuffer(height, width, memoryBuffer, memoryMaterialID2Buffer, memoryMaterialIDBuffer, memoryDistance2Buffer);
             
         }
 
@@ -112,6 +115,7 @@ namespace NullEngine.Rendering.DataStructures
             memoryBuffer.Dispose();
             memoryMaterialID2Buffer.Dispose();
             memoryMaterialIDBuffer.Dispose();
+            memoryDistance2Buffer.Dispose();
         }
     }
 
@@ -123,17 +127,19 @@ namespace NullEngine.Rendering.DataStructures
         public ArrayView1D<byte, Stride1D.Dense> frame;
         public ArrayView1D<byte, Stride1D.Dense> frameMaterialID;
         public ArrayView1D<byte, Stride1D.Dense> frameMaterialID2;
+        public ArrayView1D<byte, Stride1D.Dense> frameDistance2;
 
-        public dByteFrameBuffer(int height, int width, MemoryBuffer1D<byte, Stride1D.Dense> frame, MemoryBuffer1D<byte, Stride1D.Dense> frameMaterialID2, MemoryBuffer1D<byte, Stride1D.Dense> frameMaterialID)
+        public dByteFrameBuffer(int height, int width, MemoryBuffer1D<byte, Stride1D.Dense> frame, MemoryBuffer1D<byte, Stride1D.Dense> frameMaterialID2, MemoryBuffer1D<byte, Stride1D.Dense> frameMaterialID, MemoryBuffer1D<byte, Stride1D.Dense> frameDistance2)
         {
             this.height = height;
             this.width = width;
             this.frame = frame.View;
             this.frameMaterialID = frameMaterialID.View;
             this.frameMaterialID2 = frameMaterialID2.View;
+            this.frameDistance2 = frameDistance2.View;
         }
 
-
+        /*
         public Vec3i readFrameBuffer(int x, int y)
         {
             int newIndex = ((y * width) + x) * 3;
@@ -144,6 +150,7 @@ namespace NullEngine.Rendering.DataStructures
         {
             return new Vec3i(frame[index], frame[index + 1], frame[index + 2]);
         }
+        */
 
         public void writeFrameBuffer(int x, int y, float r, float g, float b)
         {
@@ -172,6 +179,21 @@ namespace NullEngine.Rendering.DataStructures
             frame[index + 2] = (byte)(b * 255f);
         }
 
+        //Distance2
+
+        public void writeFrameDistnace2Buffer(int index, byte r, byte g, byte b)
+        {
+            frameDistance2[index] = r;
+            frameDistance2[index + 1] = g;
+            frameDistance2[index + 2] = b;
+        }
+
+        public void writeFrameDistance2Buffer(int index, float r, float g, float b) //Coloring!!
+        {
+            frameDistance2[index] = (byte)(r * 255f);
+            frameDistance2[index + 1] = (byte)(g * 255f);
+            frameDistance2[index + 2] = (byte)(b * 255f);
+        }
 
         //MaterialID2
         public void writeFrameMaterialID2Buffer(int x, int y, int r, int g, int b)

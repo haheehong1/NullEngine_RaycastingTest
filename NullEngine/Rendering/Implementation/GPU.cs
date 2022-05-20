@@ -93,6 +93,10 @@ namespace NullEngine.Rendering.Implementation
                 frameData.outputMaterialID2Buffer[(pixel * 3) + 2] = hit.materialID;
                 frameData.outputMaterialIDBuffer[pixel] = hit.materialID;
                 frameData.depthBuffer[pixel] = hit.t;
+
+                frameData.outputDistance2Buffer[(pixel * 3)] = hit.t;
+                frameData.outputDistance2Buffer[(pixel * 3) + 1] = hit.t;
+                frameData.outputDistance2Buffer[(pixel * 3) + 2] = hit.t;
             }
         }
 
@@ -119,6 +123,11 @@ namespace NullEngine.Rendering.Implementation
             //add frameData.depthBuffer
             float distance = UtilityKernels.readFrameDistanceBuffer(frameData.depthBuffer, pixel);
             output2.writeFrameDistanceBuffer(pixel, distance);
+
+            //Distance2
+            Vec3 colorD = UtilityKernels.readFrameBuffer(frameData.outputDistance2Buffer, pixel * 3);
+            colorD = Vec3.reinhard(colorD);
+            output.writeFrameDistance2Buffer(pixel * 3, colorD.x, colorD.y, colorD.z);
         }
 
     }

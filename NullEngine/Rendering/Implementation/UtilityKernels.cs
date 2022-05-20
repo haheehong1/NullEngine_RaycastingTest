@@ -9,7 +9,7 @@ namespace NullEngine.Rendering.Implementation
 {
     public static class UtilityKernels
     {
-        public static void ClearByteFramebuffer(Index1D index, dByteFrameBuffer frameBuffer, dByteFrameBuffer frameMaterialID2Buffer, dFloatFrameBuffer frameDistanceBuffer, byte r, byte g, byte b, float t)
+        public static void ClearByteFramebuffer(Index1D index, dByteFrameBuffer frameBuffer, dByteFrameBuffer frameMaterialID2Buffer, dFloatFrameBuffer frameDistanceBuffer, dByteFrameBuffer frameDistance2Buffer, byte r, byte g, byte b, float t)
         {
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
@@ -21,7 +21,24 @@ namespace NullEngine.Rendering.Implementation
 
             int newIndex = ((y * frameBuffer.width) + x);
             frameBuffer.writeFrameBuffer(newIndex * 3, r, g, b);
-            
+
+
+
+            //Distance2
+            //FLIP Y
+            //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
+            int yd2 = (frameDistance2Buffer.height - 1) - ((index) / frameDistance2Buffer.width);
+
+            //NORMAL X
+            int xd2 = ((index) % frameDistance2Buffer.width);
+            //int y = ((index) / frameBuffer.width);
+
+            int newIndexD2 = ((yd2 * frameDistance2Buffer.width) + xd2);
+            frameDistance2Buffer.writeFrameDistance2Buffer(newIndexD2 * 3, r, g, b);
+
+
+
+
             //Material ID2
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
@@ -33,6 +50,8 @@ namespace NullEngine.Rendering.Implementation
 
             int newIndexM = ((ym * frameMaterialID2Buffer.width) + xm);
             frameMaterialID2Buffer.writeFrameMaterialID2Buffer(newIndexM * 3, r, g, b);
+
+
 
             //Material ID
             //FLIP Y
@@ -47,13 +66,14 @@ namespace NullEngine.Rendering.Implementation
             frameDistanceBuffer.writeFrameDistanceBuffer(newIndexD, t);
         }
 
+        
         public static Vec3 readFrameBuffer(ArrayView1D<float, Stride1D.Dense> frame, int width, int x, int y)
         {
             int newIndex = ((y * width) + x) * 3;
             return readFrameBuffer(frame, newIndex);
         }
 
-        public static Vec3 readFrameBuffer(ArrayView1D<float, Stride1D.Dense> frame, int index)
+        public static Vec3 readFrameBuffer(ArrayView1D<float, Stride1D.Dense> frame, int index) //distance also can use this..
         {
             return new Vec3(frame[index], frame[index + 1], frame[index + 2]);
         }

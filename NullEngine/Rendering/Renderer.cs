@@ -21,12 +21,14 @@ namespace NullEngine.Rendering
 
         private ByteFrameBuffer deviceFrameBuffer;
         private FloatFrameBuffer deviceFrameDistanceBuffer;
+        private ByteFrameBuffer deviceFrameDistance2Buffer;
 
         //where data is stored in cpu
         private byte[] frameBuffer = new byte[0];
         private byte[] frameMaterialID2Buffer = new byte[0];
         private byte[] materialIDBuffer = new byte[0];
         private float[] frameDistanceBuffer = new float[0];
+        private byte[] frameDistance2Buffer = new byte[0];
 
         private GPU gpu;
         private Camera camera;
@@ -88,6 +90,7 @@ namespace NullEngine.Rendering
                     byte[] materials = materialIDBuffer;
                     byte[] materials2 = frameMaterialID2Buffer;
                     float[] distances = frameDistanceBuffer;
+                    byte[] distances2 = frameDistance2Buffer;
                 }
 
                 frameTime = frameTimer.endUpdateForTargetUpdateTime(1000.0 / targetFramerate, true);
@@ -98,6 +101,7 @@ namespace NullEngine.Rendering
             {
                 deviceFrameBuffer.Dispose();
                 deviceFrameDistanceBuffer.Dispose();
+                deviceFrameDistance2Buffer.Dispose();
 
                 frameData.Dispose();
             }
@@ -114,6 +118,7 @@ namespace NullEngine.Rendering
                     {
                         deviceFrameBuffer.Dispose();
                         deviceFrameDistanceBuffer.Dispose();
+                        deviceFrameDistance2Buffer.Dispose();
 
                         frameData.Dispose();
                     }
@@ -122,9 +127,11 @@ namespace NullEngine.Rendering
                     frameMaterialID2Buffer = new byte[width * height *3];
                     materialIDBuffer = new byte[width * height];
                     frameDistanceBuffer = new float[width * height];
+                    frameDistance2Buffer = new byte[width * height * 3];
 
                     deviceFrameBuffer = new ByteFrameBuffer(gpu, height, width);
                     deviceFrameDistanceBuffer = new FloatFrameBuffer(gpu, height, width);
+                    deviceFrameDistance2Buffer = new ByteFrameBuffer(gpu, height, width);
 
                     frameData = new FrameData(gpu.device, width, height);
                 }
@@ -141,13 +148,13 @@ namespace NullEngine.Rendering
         {
             if (deviceFrameBuffer != null && !deviceFrameBuffer.isDisposed)
             {
-                gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer, frameData.deviceFrameData);
+                gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer, frameData.deviceFrameData);  //should I update?? for distance2
                 deviceFrameBuffer.memoryBuffer.CopyToCPU(frameBuffer);
                 deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
                 deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(materialIDBuffer);
 
                 deviceFrameDistanceBuffer.memoryDistanceBuffer.CopyToCPU(frameDistanceBuffer);
-
+                deviceFrameDistance2Buffer.memoryDistance2Buffer.CopyToCPU(frameDistance2Buffer);
 
                 //cpu side everything is stored in frameBuffer
             }
@@ -155,10 +162,13 @@ namespace NullEngine.Rendering
 
         private void Draw()
         {
-            //renderFrame.update(ref frameBuffer);//
-            renderFrame.update(ref frameMaterialID2Buffer);
-            //renderFrame.updateMaterialID(ref materialIDBuffer);//
+            //choose which layer to display
+            
+            renderFrame.update(ref frameBuffer);//
+            //renderFrame.update(ref frameMaterialID2Buffer);
+            //renderFrame.updateMaterialID(ref materialIDBuffer);
             //renderFrame.updateDistance(ref frameDistanceBuffer);
+            //renderFrame.update(ref frameDistance2Buffer);  //dont need updateMaterialID, updateDistance2
             renderFrame.frameRate = frameTimer.lastFrameTimeMS;
         }
     }
