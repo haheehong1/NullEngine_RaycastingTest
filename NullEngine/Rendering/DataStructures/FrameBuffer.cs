@@ -174,9 +174,22 @@ namespace NullEngine.Rendering.DataStructures
 
         public void writeFrameBuffer(int index, float r, float g, float b)
         {
-            frame[index] = (byte)(r * 255f);
-            frame[index + 1] = (byte)(g * 255f);
-            frame[index + 2] = (byte)(b * 255f);
+            //original
+            //frame[index] = (byte)(r * 255f);
+            //frame[index + 1] = (byte)(g * 255f);
+            //frame[index + 2] = (byte)(b * 255f);
+
+            //apply color depthmap
+            float distance = r;
+            float remap = ColorGenerator.Remap(distance, 0.0f, 5.0f, 0.0f, 1.0f);
+            byte[] pixColor = ColorGenerator.Turbo.ReturnTurboColor((float)remap);
+
+
+            frame[index] = pixColor[0];
+            frame[index + 1] = pixColor[1];
+            frame[index + 2] = pixColor[2];
+
+
         }
 
         //Distance2
