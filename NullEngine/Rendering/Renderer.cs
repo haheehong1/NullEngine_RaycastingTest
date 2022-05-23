@@ -88,6 +88,7 @@ namespace NullEngine.Rendering
                     RenderToFrameBuffer();
                     Application.Current.Dispatcher.InvokeAsync(Draw);
 
+                    byte[] depth = frameBuffer;
                     byte[] materials = frameMaterialIDBuffer;
                     byte[] materials2 = frameMaterialID2Buffer;
                     float[] distances = frameDistanceBuffer;
@@ -125,10 +126,10 @@ namespace NullEngine.Rendering
                     }
 
                     frameBuffer = new byte[width * height * 3];
-                    frameMaterialID2Buffer = new byte[width * height *3];
-                    frameMaterialIDBuffer = new byte[width * height];
                     frameDistanceBuffer = new float[width * height];
                     frameDistance2Buffer = new byte[width * height * 3];
+                    frameMaterialIDBuffer = new byte[width * height];
+                    frameMaterialID2Buffer = new byte[width * height * 3];
 
                     deviceFrameBuffer = new ByteFrameBuffer(gpu, height, width);
                     deviceFrameDistanceBuffer = new FloatFrameBuffer(gpu, height, width);
@@ -149,10 +150,11 @@ namespace NullEngine.Rendering
         {
             if (deviceFrameBuffer != null && !deviceFrameBuffer.isDisposed)
             {
-                gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer, frameData.deviceFrameData);  //should I update?? for distance2
+                gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer,/* deviceFrameBuffer.frameBuffer.frameMaterialID, deviceFrameBuffer.frameBuffer.frameMaterialID2,*/ frameData.deviceFrameData);  //should I update?? for distance2
                 deviceFrameBuffer.memoryBuffer.CopyToCPU(frameBuffer);
-                deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
+                
                 deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(frameMaterialIDBuffer);
+                deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
 
                 deviceFrameDistanceBuffer.memoryDistanceBuffer.CopyToCPU(frameDistanceBuffer);
                 deviceFrameDistance2Buffer.memoryDistance2Buffer.CopyToCPU(frameDistance2Buffer);

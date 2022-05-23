@@ -19,6 +19,7 @@ namespace NullEngine.Rendering.DataStructures
 
         public List<int> rawTriangleBuffers;
         public List<int> rawMaterialIDBuffers;
+        public List<int> rawMaterialID2Buffers;
         public List<float> rawVertexBuffers;
         public List<float> rawUVBuffers;
 
@@ -60,7 +61,8 @@ namespace NullEngine.Rendering.DataStructures
             rawUVBuffers.AddRange(uvs);
             rawTriangleBuffers.AddRange(triangles);
             rawMaterialIDBuffers.AddRange(materialIDs);
-            
+            rawMaterialID2Buffers.AddRange(materialIDs);
+
             dMesh mesh = new dMesh(id, boundingBox, origin, rotation, Voffset, Uoffset, Toffset, triangles.Count / 3);
 
             isDirty = true;
@@ -86,6 +88,7 @@ namespace NullEngine.Rendering.DataStructures
 
             rawTriangleBuffers = new List<int>();
             rawMaterialIDBuffers = new List<int>();
+            rawMaterialID2Buffers = new List<int>();
             rawVertexBuffers = new List<float>();
             rawUVBuffers = new List<float>();
 
@@ -100,6 +103,7 @@ namespace NullEngine.Rendering.DataStructures
 
         public MemoryBuffer1D<int, Stride1D.Dense> rawTriangleBuffers;
         public MemoryBuffer1D<int, Stride1D.Dense> rawMaterialIDBuffers;
+        public MemoryBuffer1D<int, Stride1D.Dense> rawMaterialID2Buffers;
         public MemoryBuffer1D<float, Stride1D.Dense> rawVertexBuffers;
         public MemoryBuffer1D<float, Stride1D.Dense> rawUVBuffers;
 
@@ -122,12 +126,14 @@ namespace NullEngine.Rendering.DataStructures
             {
                 rawTriangleBuffers = device.Allocate1D(dataManager.rawTriangleBuffers.ToArray());
                 rawMaterialIDBuffers = device.Allocate1D(dataManager.rawMaterialIDBuffers.ToArray());
+                rawMaterialID2Buffers = device.Allocate1D(dataManager.rawMaterialID2Buffers.ToArray());
                 rawVertexBuffers = device.Allocate1D(dataManager.rawVertexBuffers.ToArray());
             }
             else
             {
                 rawTriangleBuffers = device.Allocate1D<int>(1);
                 rawMaterialIDBuffers = device.Allocate1D<int>(1);
+                rawMaterialID2Buffers = device.Allocate1D<int>(1);
                 rawVertexBuffers = device.Allocate1D<float>(1);
             }
 
@@ -148,6 +154,7 @@ namespace NullEngine.Rendering.DataStructures
             rawTextureData.Dispose();
             rawVertexBuffers.Dispose();
             rawMaterialIDBuffers.Dispose();
+            rawMaterialID2Buffers.Dispose();
             textures.Dispose();
         }
     }
@@ -159,6 +166,7 @@ namespace NullEngine.Rendering.DataStructures
 
         public ArrayView1D<int, Stride1D.Dense> rawTriangleBuffers;
         public ArrayView1D<int, Stride1D.Dense> rawMaterialIDBuffers;
+        public ArrayView1D<int, Stride1D.Dense> rawMaterialID2Buffers;
         public ArrayView1D<float, Stride1D.Dense> rawVertexBuffers;
         public ArrayView1D<float, Stride1D.Dense> rawUVBuffers;
 
@@ -168,6 +176,7 @@ namespace NullEngine.Rendering.DataStructures
             textures = renderData.textures;
             rawTriangleBuffers = renderData.rawTriangleBuffers;
             rawMaterialIDBuffers = renderData.rawMaterialIDBuffers;
+            rawMaterialID2Buffers = renderData.rawMaterialID2Buffers;
             rawVertexBuffers = renderData.rawVertexBuffers;
             rawUVBuffers = renderData.rawUVBuffers;
         }

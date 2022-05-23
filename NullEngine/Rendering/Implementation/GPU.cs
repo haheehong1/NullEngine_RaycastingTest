@@ -64,6 +64,8 @@ namespace NullEngine.Rendering.Implementation
             HitRecord hit = new HitRecord();
             hit.t = float.MaxValue;
 
+            int materialIndex = 0;
+
             if(true)
             {
                 for(int i = 0; i < tlas.meshes.Length; i++)
@@ -72,7 +74,17 @@ namespace NullEngine.Rendering.Implementation
                     for(int j = 0; j < mesh.triangleLength; j++)
                     {
                         mesh.GetTriangle(j, renderData).GetTriangleHit(frameData.rayBuffer[pixel], j, ref hit);
-                        hit.materialID = renderData.rawMaterialIDBuffers[j];
+                        if (hit.t < float.MaxValue)
+                        {
+                            hit.materialID = renderData.rawMaterialID2Buffers[materialIndex];
+                        }
+                        else
+                        {
+                            hit.materialID = 0;
+                        }
+                        materialIndex++;
+
+
                         //here is raytracing part, for one ray(frameData,rayBuffer[pixel], test all meshes and all triangles in a mesh
                         //save the record to hit and save it to **framedata.outputbuffer**
                     }
@@ -103,7 +115,7 @@ namespace NullEngine.Rendering.Implementation
         public static void GenerateFrame(Index1D pixel, dByteFrameBuffer output, dFloatFrameBuffer output2, dFrameData frameData)
         {
             Vec3 color = UtilityKernels.readFrameBuffer(frameData.outputBuffer, pixel * 3);
-            color = Vec3.reinhard(color);
+            //color = Vec3.reinhard(color); can affect to distance measurement output so disabled
             output.writeFrameBuffer(pixel * 3, color.x, color.y, color.z);
 
             Vec3 materialID2 = UtilityKernels.readFrameMaterialID2Buffer(frameData.outputMaterialID2Buffer, pixel * 3); //problem
@@ -111,8 +123,18 @@ namespace NullEngine.Rendering.Implementation
             switch(materialID2.x)
             {
                 case 1:
-                    output.writeFrameMaterialID2Buffer(pixel * 3, 255, 0, 0);
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 255, 0);
                     break;
+                case 100:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 255);
+                    break;
+                case 0:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 255, 255);
+                    break;
+                default:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 0);
+                    break;
+
             }
             //output.writeFrameMaterialID2Buffer(pixel * 3, (int)materialID2.x, (int)materialID2.y, (int)materialID2.z);
 

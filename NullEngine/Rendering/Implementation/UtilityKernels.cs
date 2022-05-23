@@ -9,6 +9,7 @@ namespace NullEngine.Rendering.Implementation
 {
     public static class UtilityKernels
     {
+        /*
         public static void ClearByteFramebuffer(Index1D index, dByteFrameBuffer frameBuffer, dByteFrameBuffer frameMaterialID2Buffer, dFloatFrameBuffer frameDistanceBuffer, dByteFrameBuffer frameDistance2Buffer, byte r, byte g, byte b, float t)
         {
             //FLIP Y
@@ -46,7 +47,7 @@ namespace NullEngine.Rendering.Implementation
             //int y = ((index) / frameBuffer.width);
 
             int newIndexM = ((ym * frameMaterialID2Buffer.width) + xm);
-            frameMaterialID2Buffer.writeFrameMaterialID2Buffer(newIndexM * 3, r, g, b);
+            frameMaterialID2Buffer.writeFrameMaterialID2Buffer(newIndexM * 3, r, g, b); //???오류가 있을 수도..
 
 
             //Material ID
@@ -61,7 +62,7 @@ namespace NullEngine.Rendering.Implementation
             int newIndexD = ((yd * frameDistanceBuffer.width) + xd);
             frameDistanceBuffer.writeFrameDistanceBuffer(newIndexD, t);
         }
-
+        */
         
         public static Vec3 readFrameBuffer(ArrayView1D<float, Stride1D.Dense> frame, int width, int x, int y)
         {

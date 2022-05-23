@@ -26,7 +26,7 @@ namespace NullEngine.UI
         public int width;
         public int height;
         public WriteableBitmap wBitmap;
-        public WriteableBitmap wMaterialIDmap;
+        //public WriteableBitmap wMaterialIDmap;
         public Int32Rect rect;
         //dont need wDistanceBitmap or wMaterialBitmap
 
@@ -64,7 +64,7 @@ namespace NullEngine.UI
             width += ((width * 3) % 4);
 
             wBitmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Rgb24, null);
-            wMaterialIDmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Rgb24, null);
+            //wMaterialIDmap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Rgb24, null);
             //wDistancemap = new WriteableBitmap(width, height, 96, 96, PixelFormats.Rgb24, null);
             //later add Frame.SourceID = wMaterialIDmap;
             Frame.Source = wBitmap;
@@ -119,7 +119,7 @@ namespace NullEngine.UI
                 Info.Content = (int)frameRate + " MS";
             }
         }
-
+        /*
         public void updateMaterialID(ref byte[] data)
         {
             if (data.Length == wMaterialIDmap.PixelWidth * wMaterialIDmap.PixelHeight * 3)
@@ -133,6 +133,7 @@ namespace NullEngine.UI
                 Info.Content = (int)frameRate + " MS";
             }
         }
+        */
 
         
         
