@@ -13,8 +13,8 @@ namespace NullEngine.Rendering.DataStructures
 
         public int vertsOffset;
         public int uvOffset;
-        public int triangleOffset;
-        public int triangleLength;
+        public int triangleOffset; //triangle.count * 3
+        public int triangleLength; //traingle.count
 
         public dMesh(int meshID, AABB boundingBox, Vec3 origin, Vec3 rotation, int vertsOffset, int uvOffset, int triangleOffset, int triangleLength)
         {

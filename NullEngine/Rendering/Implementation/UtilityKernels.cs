@@ -23,7 +23,6 @@ namespace NullEngine.Rendering.Implementation
             frameBuffer.writeFrameBuffer(newIndex * 3, r, g, b);
 
 
-
             //Distance2
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
@@ -37,8 +36,6 @@ namespace NullEngine.Rendering.Implementation
             frameDistance2Buffer.writeFrameDistance2Buffer(newIndexD2 * 3, r, g, b);
 
 
-
-
             //Material ID2
             //FLIP Y
             //int x = (frameBuffer.width - 1) - ((index) % frameBuffer.width);
@@ -50,7 +47,6 @@ namespace NullEngine.Rendering.Implementation
 
             int newIndexM = ((ym * frameMaterialID2Buffer.width) + xm);
             frameMaterialID2Buffer.writeFrameMaterialID2Buffer(newIndexM * 3, r, g, b);
-
 
 
             //Material ID
@@ -98,6 +94,8 @@ namespace NullEngine.Rendering.Implementation
             return (frame[index]);
         }
 
+
+        //Distance
         public static float readFrameDistanceBuffer(ArrayView1D<float, Stride1D.Dense> frame, int index)
         {
             return (frame[index]);

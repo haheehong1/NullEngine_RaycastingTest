@@ -1,0 +1,13 @@
+{
+  "path": "../../../Assets/MaterialTest/Scene.json",
+  "objects": [
+    "../../../Assets/MaterialTest/MaterialTest.obj"
+  ],
+  "positions": [
+    {}
+  ],
+  "rotations": [
+    {}
+  ],
+  "objectCount": 1
+}

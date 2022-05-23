@@ -12,8 +12,8 @@ namespace NullEngine.Rendering
 {
     public class Renderer
     {
-        public int width;
-        public int height;
+        public int width = 30;
+        public int height = 20;
         
         private bool run = true;
         private int targetFramerate;
@@ -26,7 +26,7 @@ namespace NullEngine.Rendering
         //where data is stored in cpu
         private byte[] frameBuffer = new byte[0];
         private byte[] frameMaterialID2Buffer = new byte[0];
-        private byte[] materialIDBuffer = new byte[0];
+        private byte[] frameMaterialIDBuffer = new byte[0];
         private float[] frameDistanceBuffer = new float[0];
         private byte[] frameDistance2Buffer = new byte[0];
 
@@ -46,8 +46,9 @@ namespace NullEngine.Rendering
             //this.scene = new Scene(gpu, "../../../Assets/CubeTest/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Sponza/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Suzannes/Scene.json");
-            this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
-            camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 1500, 1000, 40, new Vec3(0, 0, 0));
+            //this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
+            this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
+            camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 0, 0, 40, new Vec3(0, 0, 0));
             frameTimer = new FrameTimer();
 
             renderFrame.onResolutionChanged = OnResChanged;
@@ -87,7 +88,7 @@ namespace NullEngine.Rendering
                     RenderToFrameBuffer();
                     Application.Current.Dispatcher.InvokeAsync(Draw);
 
-                    byte[] materials = materialIDBuffer;
+                    byte[] materials = frameMaterialIDBuffer;
                     byte[] materials2 = frameMaterialID2Buffer;
                     float[] distances = frameDistanceBuffer;
                     byte[] distances2 = frameDistance2Buffer;
@@ -125,7 +126,7 @@ namespace NullEngine.Rendering
 
                     frameBuffer = new byte[width * height * 3];
                     frameMaterialID2Buffer = new byte[width * height *3];
-                    materialIDBuffer = new byte[width * height];
+                    frameMaterialIDBuffer = new byte[width * height];
                     frameDistanceBuffer = new float[width * height];
                     frameDistance2Buffer = new byte[width * height * 3];
 
@@ -151,7 +152,7 @@ namespace NullEngine.Rendering
                 gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer, frameData.deviceFrameData);  //should I update?? for distance2
                 deviceFrameBuffer.memoryBuffer.CopyToCPU(frameBuffer);
                 deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
-                deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(materialIDBuffer);
+                deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(frameMaterialIDBuffer);
 
                 deviceFrameDistanceBuffer.memoryDistanceBuffer.CopyToCPU(frameDistanceBuffer);
                 deviceFrameDistance2Buffer.memoryDistance2Buffer.CopyToCPU(frameDistance2Buffer);
@@ -164,8 +165,8 @@ namespace NullEngine.Rendering
         {
             //choose which layer to display
             
-            renderFrame.update(ref frameBuffer);//
-            //renderFrame.update(ref frameMaterialID2Buffer);
+            //renderFrame.update(ref frameBuffer);// depthMap
+            renderFrame.update(ref frameMaterialID2Buffer);
             //renderFrame.updateMaterialID(ref materialIDBuffer);
             //renderFrame.updateDistance(ref frameDistanceBuffer);
             //renderFrame.update(ref frameDistance2Buffer);  //dont need updateMaterialID, updateDistance2

@@ -131,22 +131,37 @@ namespace NullEngine.Rendering.DataStructures.BVH
                             }
                         case "usemtl":
                             {
-                                if (true/*materials.ContainsKey(split[1])*/)
-                                {
+                                //if (true/*materials.ContainsKey(split[1])*/)
+                                //{
                                     switch (split[1])
                                     {
                                         case "Building":
                                             mat = 1;
                                             break;
+                                        case "Tree":
+                                            mat = 2;
+                                            break;
+                                        case "Pavement":
+                                            mat = 3;
+                                            break;
+                                        case "Grass":
+                                            mat = 4;
+                                            break;
+                                        case "Dynamic":
+                                            mat = 5;
+                                            break;
+                                        default:
+                                            mat = 0;
+                                            break;
                                     }
                                     //mat = worldData.worldBuffer.addMaterial(material);
-                                }
-                                else
-                                {
-                                    mat = 0;
+                                //}
+                                //else
+                                //{
+                                    //mat = 0;
                                     //mat = material;
                                     //mat = worldData.worldBuffer.addMaterial(MaterialData.makeDiffuse(new Vec3(1, 0, 1)));
-                                }
+                                //}
                                 // material handling happens here!
                                 break;
                             }

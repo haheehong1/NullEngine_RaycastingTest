@@ -147,6 +147,7 @@ namespace NullEngine.Rendering.DataStructures
         {
             rawTextureData.Dispose();
             rawVertexBuffers.Dispose();
+            //rawMaterialIDBuffers.Dispose();
             textures.Dispose();
         }
     }

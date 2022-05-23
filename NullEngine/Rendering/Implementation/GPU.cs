@@ -108,13 +108,26 @@ namespace NullEngine.Rendering.Implementation
 
             Vec3 materialID2 = UtilityKernels.readFrameMaterialID2Buffer(frameData.outputMaterialID2Buffer, pixel * 3); //problem
             //materialID2 = Vec3.reinhard(materialID2);
-            switch(materialID2.x)
+            //스위치문은,, gpu에서 쓰면 안된다...
+            switch (materialID2.x)
             {
                 case 1:
                     output.writeFrameMaterialID2Buffer(pixel * 3, 255, 0, 0);
                     break;
+                case 2:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 127, 0);
+                    break;
+                case 3:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 190, 190, 190);
+                    break;
+                case 4:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 255);
+                    break;
+                case 5:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 255, 127, 0);
+                    break;
             }
-            //output.writeFrameMaterialID2Buffer(pixel * 3, (int)materialID2.x, (int)materialID2.y, (int)materialID2.z);
+            output.writeFrameMaterialID2Buffer(pixel * 3, (int)materialID2.x, (int)materialID2.y, (int)materialID2.z);
 
             //add frameData.outputMaterialIDBuffer
             int materialID = UtilityKernels.readFrameMaterialIDBuffer(frameData.outputMaterialIDBuffer, pixel);
