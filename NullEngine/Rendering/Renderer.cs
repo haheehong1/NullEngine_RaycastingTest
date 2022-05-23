@@ -167,8 +167,8 @@ namespace NullEngine.Rendering
         {
             //choose which layer to display
             
-            //renderFrame.update(ref frameBuffer);// depthMap
-            renderFrame.update(ref frameMaterialID2Buffer);
+            renderFrame.update(ref frameBuffer);// depthMap
+            //renderFrame.update(ref frameMaterialID2Buffer);
             //renderFrame.updateMaterialID(ref materialIDBuffer);
             //renderFrame.updateDistance(ref frameDistanceBuffer);
             //renderFrame.update(ref frameDistance2Buffer);  //dont need updateMaterialID, updateDistance2

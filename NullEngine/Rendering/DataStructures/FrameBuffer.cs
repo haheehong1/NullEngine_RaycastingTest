@@ -181,7 +181,7 @@ namespace NullEngine.Rendering.DataStructures
 
             //apply color depthmap
             float distance = r;
-            float remap = ColorGenerator.Remap(distance, 0.0f, 5.0f, 0.0f, 1.0f);
+            float remap = ColorGenerator.Remap(distance, 0.0f, 20.0f, 0.0f, 1.0f);
             byte[] pixColor = ColorGenerator.Turbo.ReturnTurboColor((float)remap);
 
 
