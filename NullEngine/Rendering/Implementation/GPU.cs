@@ -62,7 +62,10 @@ namespace NullEngine.Rendering.Implementation
         public static void HitRays(Index1D pixel, dFrameData frameData, dTLAS tlas, dRenderData renderData)
         {
             HitRecord hit = new HitRecord();
+            HitRecord tempHit = new HitRecord();
             hit.t = float.MaxValue;
+            hit.materialID = 0;
+            tempHit.t = float.MaxValue;
 
             int materialIndex = 0;
 
@@ -73,17 +76,14 @@ namespace NullEngine.Rendering.Implementation
                     dMesh mesh = tlas.meshes[i];
                     for(int j = 0; j < mesh.triangleLength; j++)
                     {
-                        mesh.GetTriangle(j, renderData).GetTriangleHit(frameData.rayBuffer[pixel], j, ref hit);
-                        if (hit.t < float.MaxValue)
+                        mesh.GetTriangle(j, renderData).GetTriangleHit(frameData.rayBuffer[pixel], j, ref tempHit);
+                        if (tempHit.t < hit.t)
                         {
+                            hit.t = tempHit.t;
                             hit.materialID = renderData.rawMaterialID2Buffers[materialIndex];
                         }
-                        else
-                        {
-                            hit.materialID = 0;
-                        }
+                        
                         materialIndex++;
-
 
                         //here is raytracing part, for one ray(frameData,rayBuffer[pixel], test all meshes and all triangles in a mesh
                         //save the record to hit and save it to **framedata.outputbuffer**
@@ -92,18 +92,20 @@ namespace NullEngine.Rendering.Implementation
             }
             else
             {
-                tlas.hit(renderData, frameData.rayBuffer[pixel], 0.01f, ref hit);
+                tlas.hit(renderData, frameData.rayBuffer[pixel], 0.01f, ref tempHit);
             }
+
+            frameData.outputMaterialID2Buffer[(pixel * 3)] = hit.materialID; //hum.. let's see if this works
+            frameData.outputMaterialID2Buffer[(pixel * 3) + 1] = hit.materialID;
+            frameData.outputMaterialID2Buffer[(pixel * 3) + 2] = hit.materialID;
+            frameData.outputMaterialIDBuffer[pixel] = hit.materialID;
 
             if (hit.t < float.MaxValue)
             {
                 frameData.outputBuffer[(pixel * 3)]     = hit.t;
                 frameData.outputBuffer[(pixel * 3) + 1] = hit.t;
                 frameData.outputBuffer[(pixel * 3) + 2] = hit.t;
-                frameData.outputMaterialID2Buffer[(pixel * 3)] = hit.materialID; //hum.. let's see if this works
-                frameData.outputMaterialID2Buffer[(pixel * 3) + 1] = hit.materialID;
-                frameData.outputMaterialID2Buffer[(pixel * 3) + 2] = hit.materialID;
-                frameData.outputMaterialIDBuffer[pixel] = hit.materialID;
+                
                 frameData.depthBuffer[pixel] = hit.t;
 
                 frameData.outputDistance2Buffer[(pixel * 3)] = hit.t;
@@ -115,7 +117,7 @@ namespace NullEngine.Rendering.Implementation
         public static void GenerateFrame(Index1D pixel, dByteFrameBuffer output, dFloatFrameBuffer output2, dFrameData frameData)
         {
             Vec3 color = UtilityKernels.readFrameBuffer(frameData.outputBuffer, pixel * 3);
-            //color = Vec3.reinhard(color); can affect to distance measurement output so disabled
+            //color = Vec3.reinhard(color); //can affect to distance measurement output so disabled
             output.writeFrameBuffer(pixel * 3, color.x, color.y, color.z);
 
             Vec3 materialID2 = UtilityKernels.readFrameMaterialID2Buffer(frameData.outputMaterialID2Buffer, pixel * 3); //problem

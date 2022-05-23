@@ -48,7 +48,7 @@ namespace NullEngine.Rendering
             //this.scene = new Scene(gpu, "../../../Assets/Suzannes/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
             this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
-            camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 0, 0, 40, new Vec3(0, 0, 0));
+            camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 30, 20, 40, new Vec3(0, 0, 0));
             frameTimer = new FrameTimer();
 
             renderFrame.onResolutionChanged = OnResChanged;
