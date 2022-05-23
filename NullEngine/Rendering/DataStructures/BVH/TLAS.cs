@@ -136,20 +136,20 @@ namespace NullEngine.Rendering.DataStructures.BVH
                                 switch (split[1])
                                 {
                                     case "Building":
-                                        mat = 100;
-                                        break;
-                                    case "Tree":
                                         mat = 1;
                                         break;
-                                    //case "Pavement":
-                                    //    mat = 3;
-                                    //    break;
-                                    //case "Grass":
-                                    //    mat = 4;
-                                    //    break;
-                                    //case "Dynamic":
-                                    //    mat = 5;
-                                    //    break;
+                                    case "Tree":
+                                        mat = 2;
+                                        break;
+                                    case "Pavement":
+                                        mat = 3;
+                                        break;
+                                    case "Grass":
+                                        mat = 4;
+                                        break;
+                                    case "Dynamic":
+                                        mat = 5;
+                                        break;
                                     default:
                                         mat = 0;
                                         break;

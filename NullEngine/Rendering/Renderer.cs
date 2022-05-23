@@ -46,8 +46,8 @@ namespace NullEngine.Rendering
             //this.scene = new Scene(gpu, "../../../Assets/CubeTest/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Sponza/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Suzannes/Scene.json");
-            //this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
-            this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
+            this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
+            //this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
             camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 30, 20, 40, new Vec3(0, 0, 0));
             frameTimer = new FrameTimer();
 
@@ -167,8 +167,8 @@ namespace NullEngine.Rendering
         {
             //choose which layer to display
             
-            renderFrame.update(ref frameBuffer);// depthMap
-            //renderFrame.update(ref frameMaterialID2Buffer);
+            //renderFrame.update(ref frameBuffer);// depthMap
+            renderFrame.update(ref frameMaterialID2Buffer);
             //renderFrame.updateMaterialID(ref materialIDBuffer);
             //renderFrame.updateDistance(ref frameDistanceBuffer);
             //renderFrame.update(ref frameDistance2Buffer);  //dont need updateMaterialID, updateDistance2

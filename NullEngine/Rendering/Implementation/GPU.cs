@@ -125,13 +125,22 @@ namespace NullEngine.Rendering.Implementation
             switch(materialID2.x)
             {
                 case 1:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 255, 0, 0);
+                    break;
+                case 2:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 125, 0);
+                    break;
+                case 3:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 50, 50, 50);
+                    break;
+                case 4:
                     output.writeFrameMaterialID2Buffer(pixel * 3, 0, 255, 0);
                     break;
-                case 100:
-                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 255);
+                case 5:
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 255, 255, 0);
                     break;
                 case 0:
-                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 255, 255);
+                    output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 0);
                     break;
                 default:
                     output.writeFrameMaterialID2Buffer(pixel * 3, 0, 0, 0);
