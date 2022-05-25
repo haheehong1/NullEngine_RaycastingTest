@@ -176,6 +176,16 @@ namespace NullEngine.Rendering.DataStructures
                             v1.x * v2.y - v1.y * v2.x);
         }
 
+        public static Vec3 rotate(Vec3 v, Vec3 k, float theta)
+        {
+            float ct = (float)XMath.Cos(theta);
+            float st = (float)XMath.Sin(theta);
+            var khat = Vec3.unitVector(k);
+
+            var vrot = v * ct + Vec3.cross(khat, v) * st + khat * Vec3.dot(khat, v) * (1.0f - ct);
+            return vrot;
+        }
+
 
         public static Vec3 unitVector(Vec3 v)
         {

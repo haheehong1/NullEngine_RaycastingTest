@@ -21,15 +21,22 @@ namespace NullEngine.Rendering.Implementation
         public GPU(bool forceCPU)
         {
             context = Context.Create(builder => builder.Cuda().CPU().EnableAlgorithms().Assertions());
-            
-            ////General device setup
-            //device = context.GetPreferredDevice(preferCPU: forceCPU)
-            //.CreateAccelerator(context);
 
-            //Jaeha's personal setup for Nvidia GPU select as an accelerator
-            device = context.GetCudaDevice(0).CreateAccelerator(context);
+            if (forceCPU)
+            {
+                device = context.GetPreferredDevice(preferCPU: forceCPU)
+            .CreateAccelerator(context);
+            }
+            else
+            {
+                //Jaeha's personal setup for Nvidia GPU select as an accelerator
+                device = context.GetCudaDevice(0).CreateAccelerator(context);
+            }
 
-            
+
+
+
+
 
             initRenderKernels();
         }
@@ -87,7 +94,7 @@ namespace NullEngine.Rendering.Implementation
                     for(int j = 0; j < mesh.triangleLength; j++)
                     {
                         mesh.GetTriangle(j, renderData).GetTriangleHit(frameData.rayBuffer[pixel], j, ref tempHit);
-                        if (tempHit.t < hit.t)
+                        if (tempHit.t < hit.t && tempHit.t > 0)
                         {
                             hit.t = tempHit.t;
                             hit.materialID = renderData.rawMaterialID2Buffers[materialIndex];

@@ -12,8 +12,8 @@ namespace NullEngine.Rendering
 {
     public class Renderer
     {
-        public int width = 30;
-        public int height = 20;
+        public int width = 36;
+        public int height = 10;
         
         private bool run = true;
         private int targetFramerate;
@@ -46,9 +46,12 @@ namespace NullEngine.Rendering
             //this.scene = new Scene(gpu, "../../../Assets/CubeTest/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Sponza/Scene.json");
             //this.scene = new Scene(gpu, "../../../Assets/Suzannes/Scene.json");
-            this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
-            //this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
-            camera = new Camera(new Vec3(0, 0, 10), new Vec3(0, 0, 0), new Vec3(0, -1, 0), 30, 20, 40, new Vec3(0, 0, 0));
+            //this.scene = new Scene(gpu, "../../../Assets/Viewbackground/Scene.json");
+            this.scene = new Scene(gpu, "../../../Assets/MaterialTest/Scene.json");
+
+            //Panoramic: verticalFov = 180
+            //camera origin and lookAt coordinates should be changed, (x, y, z) -> (x, -z, -y)
+            camera = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 36, 10, 180, new Vec3(0, 0, 0));
             frameTimer = new FrameTimer();
 
             renderFrame.onResolutionChanged = OnResChanged;

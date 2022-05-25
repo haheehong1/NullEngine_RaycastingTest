@@ -53,7 +53,14 @@ namespace NullEngine.Rendering.DataStructures
             axis = OrthoNormalBasis.fromZY(Vec3.unitVector(lookAt - origin), up);
 
             aspectRatio = ((float)width / (float)height);
-            cameraPlaneDist = 1.0f / XMath.Tan(camera.verticalFov * XMath.PI / 360.0f);
+            if (camera.verticalFov == 180)
+            {
+                cameraPlaneDist = float.MaxValue;
+            }
+            else
+            {
+                cameraPlaneDist = 1.0f / XMath.Tan(camera.verticalFov * XMath.PI / 360.0f);
+            }
             this.verticalFov = camera.verticalFov;
             reciprocalHeight = 1.0f / height;
             reciprocalWidth = 1.0f / width;
@@ -74,13 +81,21 @@ namespace NullEngine.Rendering.DataStructures
             axis = OrthoNormalBasis.fromZY(Vec3.unitVector(lookAt - origin), up);
 
             aspectRatio = ((float)width / (float)height);
-            cameraPlaneDist = 1.0f / XMath.Tan(verticalFov * XMath.PI / 360.0f);
+            if (verticalFov == 180)
+            {
+                cameraPlaneDist = float.MaxValue;
+            }
+            else
+            {
+                cameraPlaneDist = 1.0f / XMath.Tan(verticalFov * XMath.PI / 360.0f);
+            }
             reciprocalHeight = 1.0f / height;
             reciprocalWidth = 1.0f / width;
         }
 
         public Camera(Vec3 origin, Vec3 lookAt, Vec3 up, int width, int height, float verticalFov, Vec3 noHitColor)
         {
+            
             this.width = new SpecializedValue<int>(width);
             this.height = new SpecializedValue<int>(height);
             this.noHitColor = noHitColor;
@@ -93,7 +108,15 @@ namespace NullEngine.Rendering.DataStructures
             axis = OrthoNormalBasis.fromZY(Vec3.unitVector(lookAt - origin), up);
 
             aspectRatio = ((float)width / (float)height);
-            cameraPlaneDist = 1.0f / XMath.Tan(verticalFov * XMath.PI / 360.0f);
+            if (verticalFov == 180)
+            {
+                cameraPlaneDist = float.MaxValue;
+            }
+            else
+            {
+                cameraPlaneDist = 1.0f / XMath.Tan(verticalFov * XMath.PI / 360.0f);
+            }
+
             reciprocalHeight = 1.0f / height;
             reciprocalWidth = 1.0f / width;
         }
@@ -111,7 +134,59 @@ namespace NullEngine.Rendering.DataStructures
 
         public Ray GetRay(float x, float y)
         {
+            if(this.verticalFov == 180)
+            {
+
+                //Define Left, right, up, down vectors to measure room dimension  
+                //**be carefull, this code is copied from seemo and seemo's y, z is opposite for null-engine's y, z
+                Vec3 nvd = Vec3.unitVector(this.lookAt - this.origin);
+                Vec3 Dir = nvd;
+
+                Vec3 vup = new Vec3(0, 1, 0);
+
+                Vec3 xAxis = Vec3.unitVector(Vec3.cross(nvd, vup));
+
+                Vec3 yAxis = Vec3.unitVector(Vec3.cross(nvd, -xAxis));
+
+                float horizontalViewAngle = 360; //this.aspectRatio * verticalFov;
+                int xres = (width / 2) * 2;
+                float angleStep = horizontalViewAngle / xres;
+                //int yres = ((int)(verticalFov / angleStep) / 2) * 2;
+                int yres = (int)XMath.Ceiling(100/ angleStep / 2) * 2;
+
+
+
+                //generate view rays
+                //        rotate to the left edge     
+                var _xrot = (angleStep * xres / 2.0);
+                //        rotate to the top edge     
+                var _yrot = (angleStep * yres / 2.0);
+
+                var _vdy = Vec3.rotate(nvd, xAxis, -(float)(_yrot * Math.PI / 180));
+                var _vdx = Vec3.rotate(_vdy, yAxis, -(float)(_xrot * Math.PI / 180));
+
+                Vec3 TopCorner = _vdx;
+
+                //Vec3 xAxisTemp = Vec3.unitVector(Vec3.cross(nvd, yAxis));
+
+
+                var xrot = (xres - x) * angleStep;
+                var vdx = Vec3.rotate(TopCorner, yAxis, (float)(xrot * XMath.PI / 180));
+
+                Vec3 xAxisTemp = Vec3.cross(yAxis, vdx);
+
+                var yrot = -(y) * angleStep;
+
+                var vdy = Vec3.rotate(vdx, xAxisTemp, (float)(yrot * XMath.PI / 180));
+
+               
+
+                return new Ray(origin, vdy);
+            }
+            
             return rayFromUnit(2f * (x * reciprocalWidth) - 1f, 2f * (y * reciprocalHeight) - 1f);
+            
+            
         }
     }
 
