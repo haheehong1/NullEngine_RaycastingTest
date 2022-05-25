@@ -17,11 +17,19 @@ namespace NullEngine.Rendering.Implementation
         public Action<Index1D, Camera, dFrameData> generatePrimaryRays;
         public Action<Index1D, dFrameData, dTLAS, dRenderData> hitRays;
         public Action<Index1D, dByteFrameBuffer, dFloatFrameBuffer, dFrameData> generateFrame;
+
         public GPU(bool forceCPU)
         {
             context = Context.Create(builder => builder.Cuda().CPU().EnableAlgorithms().Assertions());
-            device = context.GetPreferredDevice(preferCPU: forceCPU)
-                                      .CreateAccelerator(context);
+            
+            ////General device setup
+            //device = context.GetPreferredDevice(preferCPU: forceCPU)
+            //.CreateAccelerator(context);
+
+            //Jaeha's personal setup for Nvidia GPU select as an accelerator
+            device = context.GetCudaDevice(0).CreateAccelerator(context);
+
+            
 
             initRenderKernels();
         }
@@ -55,6 +63,7 @@ namespace NullEngine.Rendering.Implementation
             float x = (pixel % camera.width);
             float y = (pixel / camera.width);
 
+
             frameData.rayBuffer[pixel] = camera.GetRay(x, y);
         }
 
@@ -66,6 +75,7 @@ namespace NullEngine.Rendering.Implementation
             hit.t = float.MaxValue;
             hit.materialID = 0;
             tempHit.t = float.MaxValue;
+            
 
             int materialIndex = 0;
 
@@ -116,6 +126,8 @@ namespace NullEngine.Rendering.Implementation
 
         public static void GenerateFrame(Index1D pixel, dByteFrameBuffer output, dFloatFrameBuffer output2, dFrameData frameData)
         {
+            
+
             Vec3 color = UtilityKernels.readFrameBuffer(frameData.outputBuffer, pixel * 3);
             //color = Vec3.reinhard(color); //can affect to distance measurement output so disabled
             output.writeFrameBuffer(pixel * 3, color.x, color.y, color.z);
