@@ -1,4 +1,5 @@
 ﻿using NullEngine.Rendering;
+using NullEngine.Rendering.DataStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +28,9 @@ namespace NullEngine
         {
             InitializeComponent();
 
-            Closed += MainWindow_Closed;
+            Closed += MainWindow_Closed; //stop renderer
 
-            InitRenderer();
+            InitRenderer(); //generate a new renderer and start the renderer
         }
 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -39,8 +40,27 @@ namespace NullEngine
 
         private void InitRenderer()
         {
-            renderer = new Renderer(renderFrame, 60, false);
+            // 0. generate renderer
+            renderer = new Renderer(renderFrame, 2, false);
+
+            // 1.change camera and setup thread
+            Camera camera1 = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 36, 10, 180, new Vec3(0, 0, 0));
+            renderer.CameraUpdateAndRender(camera1);
+
+            // 2.start rendering
             renderer.Start();
+
+            
+            
+            ////다 계산하고, 디스플레이가 되네;;;;
+
+            // 3.change camera and setup thread
+            Camera camera2 = new Camera(new Vec3(0, 0, 100), new Vec3(-1, 0, -1), new Vec3(0, 1, 0), 36, 10, 180, new Vec3(0, 0, 0));
+            renderer.CameraUpdateAndRender(camera2);
+
+            // 4.start rendering
+            renderer.Start();
+            
         }
     }
 }

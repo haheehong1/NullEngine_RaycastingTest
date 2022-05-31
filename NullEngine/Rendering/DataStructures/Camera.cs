@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace NullEngine.Rendering.DataStructures
 {
@@ -121,6 +123,36 @@ namespace NullEngine.Rendering.DataStructures
             reciprocalWidth = 1.0f / width;
         }
 
+        //methods for json
+        public string ToJSON()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+
+        static public Camera FromJSON(string txt)
+        {
+            return JsonConvert.DeserializeObject<Camera>(txt);
+        }
+
+        public void ToFile(string path)
+        {
+            File.WriteAllText(path, this.ToJSON());
+        }
+
+        static public Camera FromFile(string path)
+        {
+            var txt = File.ReadAllText(path);
+            return JsonConvert.DeserializeObject<Camera>(txt);
+        }
+        /*
+        public override string ToString()
+        {
+            return "Resutls for " + Results.Count + " nodes.";
+        }
+        */
+
+
+
         //creating ray from pixel coordinate
         private Ray rayFromUnit(float x, float y)
         {
@@ -187,6 +219,8 @@ namespace NullEngine.Rendering.DataStructures
             return rayFromUnit(2f * (x * reciprocalWidth) - 1f, 2f * (y * reciprocalHeight) - 1f);
             
             
+
+
         }
     }
 
@@ -272,5 +306,8 @@ namespace NullEngine.Rendering.DataStructures
             Vec3 yy = Vec3.unitVector(Vec3.cross(z, xx));
             return new OrthoNormalBasis(xx, yy, z);
         }
+
+
+        
     }
 }

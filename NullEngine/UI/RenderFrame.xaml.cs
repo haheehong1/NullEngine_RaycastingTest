@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -13,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
 
 namespace NullEngine.UI
 {
@@ -106,18 +108,34 @@ namespace NullEngine.UI
 
         public void update(ref byte[] data)
         {
-            if(data.Length == wBitmap.PixelWidth * wBitmap.PixelHeight * 3)
+            
+
+            if (data.Length == wBitmap.PixelWidth * wBitmap.PixelHeight * 3)
             {
                 wBitmap.Lock();
                 IntPtr pBackBuffer = wBitmap.BackBuffer;
                 Marshal.Copy(data, 0, pBackBuffer, data.Length);
                 wBitmap.AddDirtyRect(rect);
 
+                
                 //start displaying
                 wBitmap.Unlock();
 
                 Info.Content = (int)frameRate + " MS";
             }
+
+            //void CreateThumbnail(string filename, BitmapSource image5)
+            //{
+            //    if (filename != string.Empty)
+            //    {
+            //        using (FileStream stream5 = new FileStream(filename, FileMode.Create))
+            //        {
+            //            PngBitmapEncoder encoder5 = new PngBitmapEncoder();
+            //            encoder5.Frames.Add(BitmapFrame.Create(image5));
+            //            encoder5.Save(stream5);
+            //        }
+            //    }
+            //}
         }
         /*
         public void updateMaterialID(ref byte[] data)

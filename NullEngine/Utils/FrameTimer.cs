@@ -40,7 +40,7 @@ namespace NullEngine.Utils
         public double endUpdateForTargetUpdateTime(double targetUpdateTimeMS, bool sleep)
         {
             endUpdate();
-
+             
             double sleepTime = targetUpdateTimeMS - lastFrameTimeMS;
 
             if (sleep && sleepTime >= 0)
