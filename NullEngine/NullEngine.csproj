@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="CjClutter.ObjLoader" Version="1.0.0" />
+    <PackageReference Include="Grasshopper" Version="7.18.22124.3001" />
+    <PackageReference Include="GrasshopperDll" Version="1.0.0" />
     <PackageReference Include="ILGPU" Version="1.0.0-rc3" />
     <PackageReference Include="ILGPU.Algorithms" Version="1.0.0-rc3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />

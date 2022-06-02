@@ -41,7 +41,7 @@ namespace NullEngine
         private void InitRenderer()
         {
             // 0. generate renderer
-            renderer = new Renderer(renderFrame, 2, false);
+            renderer = new Renderer(renderFrame, 10, true);
 
             // 1.change camera and setup thread
             Camera camera1 = new Camera(new Vec3(0, 0, 0), new Vec3(0, 0, -1), new Vec3(0, 1, 0), 36, 10, 180, new Vec3(0, 0, 0));
@@ -50,8 +50,8 @@ namespace NullEngine
             // 2.start rendering
             renderer.Start();
 
-            
-            
+
+
             ////다 계산하고, 디스플레이가 되네;;;;
 
             // 3.change camera and setup thread
@@ -60,7 +60,7 @@ namespace NullEngine
 
             // 4.start rendering
             renderer.Start();
-            
+
         }
     }
 }

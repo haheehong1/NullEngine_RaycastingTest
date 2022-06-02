@@ -16,7 +16,7 @@ namespace NullEngine.Rendering
     {
         public int width = 36;
         public int height = 10;
-        
+
         private bool run = true;
         private int targetFramerate;
         private double frameTime;
@@ -53,7 +53,7 @@ namespace NullEngine.Rendering
 
             frameTimer = new FrameTimer();
 
-            
+
         }
 
         public void CameraUpdateAndRender(Camera cameraInput)
@@ -67,21 +67,6 @@ namespace NullEngine.Rendering
             //main rendereing setup
             renderThread = new Thread(RenderThread);
             renderThread.IsBackground = true;
-
-
-            ////generate json with camera info to check
-            //string path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            //string dir = (path + @"\NullEngine");
-
-            //if (!Directory.Exists(dir))
-            //{
-            //    Directory.CreateDirectory(dir);
-            //}
-
-            //long time = DateTime.Now.ToFileTime();
-            //camera.ToFile(dir + @"\RaycastingResult" + time + ".json");
-            ////json file saving process ends
-
 
         }
 
@@ -107,16 +92,16 @@ namespace NullEngine.Rendering
         //eveything below this happens in the render thread
         private void RenderThread()
         {
-            while (run) 
+            while (run)
             {
                 frameTimer.startUpdate();
 
-                if(ReadyFrameBuffer())  //dispose previous bufferdata and reset them for new resolution
+                if (ReadyFrameBuffer())  //dispose previous bufferdata and reset them for new resolution
                 {
                     RenderToFrameBuffer();  //actual rendereing and copy the data to cpu
                     Application.Current.Dispatcher.InvokeAsync(Draw);  //display cpu stored data to the window
                                                                        //generate json with camera info to check
-                    
+
 
                     byte[] depth = frameBuffer;
                     byte[] materials = frameMaterialIDBuffer;
@@ -161,7 +146,7 @@ namespace NullEngine.Rendering
                 renderFrame.frameTime = frameTime;
             }
 
-            
+
 
             if (deviceFrameBuffer != null)   //If there are data inside of gpu storage, remove
             {
@@ -176,9 +161,9 @@ namespace NullEngine.Rendering
 
         private bool ReadyFrameBuffer()
         {
-            if((width != 0 && height != 0))
+            if ((width != 0 && height != 0))
             {
-                if(deviceFrameBuffer == null || deviceFrameBuffer.frameBuffer.width != width || deviceFrameBuffer.frameBuffer.height != height)
+                if (deviceFrameBuffer == null || deviceFrameBuffer.frameBuffer.width != width || deviceFrameBuffer.frameBuffer.height != height)
                 {
                     if (deviceFrameBuffer != null)
                     {
@@ -216,7 +201,7 @@ namespace NullEngine.Rendering
             {
                 gpu.Render(camera, scene, deviceFrameBuffer.frameBuffer, deviceFrameDistanceBuffer.frameDistanceBuffer,/* deviceFrameBuffer.frameBuffer.frameMaterialID, deviceFrameBuffer.frameBuffer.frameMaterialID2,*/ frameData.deviceFrameData);  //should I update?? for distance2
                 deviceFrameBuffer.memoryBuffer.CopyToCPU(frameBuffer);
-                
+
                 deviceFrameBuffer.memoryMaterialIDBuffer.CopyToCPU(frameMaterialIDBuffer);
                 deviceFrameBuffer.memoryMaterialID2Buffer.CopyToCPU(frameMaterialID2Buffer);
 
@@ -230,7 +215,7 @@ namespace NullEngine.Rendering
         private void Draw()
         {
             //choose which layer to display
-            
+
             //renderFrame.update(ref frameBuffer);// depthMap
             renderFrame.update(ref frameMaterialID2Buffer);
             //renderFrame.updateMaterialID(ref materialIDBuffer);
